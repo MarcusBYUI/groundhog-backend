@@ -32,4 +32,18 @@ const addNFT = async (req, res, next) => {
   }
 };
 
-module.exports = { addNFT };
+const getaAllNFT = async (req, res, next) => {
+  try {
+    const result = await Collection.find();
+
+    res.status(200).json({ status: 200, data: result });
+  } catch (error) {
+    if (error.name == "ValidationError") {
+      next(createError.UnprocessableEntity(error.message));
+      return;
+    }
+    next(createError(422, error.message));
+  }
+};
+
+module.exports = { addNFT, getaAllNFT };
