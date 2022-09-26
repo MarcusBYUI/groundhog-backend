@@ -36,7 +36,7 @@ const getaAllNFT = async (req, res, next) => {
   try {
     const result = await Collection.find();
 
-    res.status(200).json({ status: 200, data: result });
+    res.status(200).json(result);
   } catch (error) {
     if (error.name == "ValidationError") {
       next(createError.UnprocessableEntity(error.message));
@@ -46,4 +46,25 @@ const getaAllNFT = async (req, res, next) => {
   }
 };
 
-module.exports = { addNFT, getaAllNFT };
+const deleteNFTById = async (req, res, next) => {
+  try {
+    const result = await Collection.deleteOne({
+      _id: req.params.id,
+    });
+
+    if (result.deletedCount < 1) {
+      next(createError(422, "Collection does not exist"));
+      return;
+    }
+
+    res.status(200).json({ status: 200, message: "Delete Successful" });
+  } catch (error) {
+    if (error instanceof mongoose.CastError) {
+      next(createError(422, "Invalid Collection ID"));
+      return;
+    }
+    next(error);
+  }
+};
+
+module.exports = { addNFT, getaAllNFT, deleteNFTById };
