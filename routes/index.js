@@ -4,12 +4,16 @@ const routes = require("express").Router();
 const createError = require("http-errors");
 const UsersRoute = require("./user/users");
 const authRoute = require("./user/auth");
+const collectionRoute = require("./collection/collection");
 
 //auth
 routes.use("/auth", authRoute);
 
 //user/users route
 routes.use("/user", UsersRoute);
+
+//collection route
+routes.use("/collection", collectionRoute);
 
 //404 error handler
 routes.use((req, res, next) => {

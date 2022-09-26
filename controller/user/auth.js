@@ -7,6 +7,8 @@ const createError = require("http-errors");
 const { sendEmail } = require("../../utils/index");
 const Token = require("../../models/user/token");
 
+const url = "http://localhost:3000/verify/";
+
 const login = async (req, res, next) => {
   const schema = Joi.object().keys({
     email: Joi.string().email().required(),
@@ -28,12 +30,18 @@ const login = async (req, res, next) => {
     const user = await User.findOne({ email: value.email });
 
     if (!user) {
-      next(createError.UnprocessableEntity("User Not FOund"));
+      next(createError.UnprocessableEntity("User Not Found"));
+      return;
+    }
+
+    if (!user.isverified) {
+      next(createError.UnprocessableEntity("User Not Verified"));
+      return;
     }
 
     bcrypt.compare(value.password, user.password, function (err, result) {
       if (err) {
-        next(createError(422, error.message));
+        next(createError(422, err.message));
         return;
       }
       if (result) {
@@ -50,15 +58,13 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res, next) => {
-  // #swagger.description = 'Logout a User'
-
   req.logout();
   res.send("Logout Succeful");
 };
 
 const addUser = async (req, res, next) => {
   const schema = Joi.object().keys({
-    username: Joi.string().required(),
+    fullname: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string()
       .min(6)
@@ -69,15 +75,19 @@ const addUser = async (req, res, next) => {
         )
       )
       .required(),
+    phone: Joi.number().required(),
+    haddress: Joi.string().required(),
   });
 
   try {
     //validation
     const value = await schema.validateAsync(req.body);
     const user = new User({
-      username: value.username,
+      fullname: value.fullname,
       email: value.email,
       password: value.password,
+      phone: value.phone,
+      haddress: value.haddress,
     });
 
     await user.save();
@@ -115,25 +125,28 @@ const verify = async (req, res, next) => {
       return;
     }
 
-    if (user.isverified) {
-      return res
-        .status(200)
-        .json({ message: "This user has already been verified." });
+    if (user.isverified == true) {
+      return res.status(200).json({ message: "This user has been verified." });
     }
 
     await User.updateOne({ _id: token.userId }, { $set: { isverified: true } });
 
-    res.status(200).send("The account has been verified. Please log in.");
+    res.status(200).send("The account has been verified.");
   } catch (error) {
     next(createError(422, error));
   }
 };
 
 const resendToken = async (req, res, next) => {
-  try {
-    const { email } = req.user;
+  const schema = Joi.object().keys({
+    email: Joi.string().email().required(),
+  });
 
-    const user = await User.findOne({ email });
+  try {
+    //validation
+    const value = await schema.validateAsync(req.body);
+
+    const user = await User.findOne({ email: value.email });
 
     if (user.isverified) {
       return res.status(400).json({
@@ -158,7 +171,7 @@ const sendVerificationEmail = async (user, req, res, next) => {
     const to = user.email;
     const from = process.env.FROM_EMAIL;
     const code = token.token;
-    const html = `<p>Hi ${user.username}<p><br><p>Please make use of this token ${code} to verify your account.</p> 
+    const html = `<p>Hi ${user.fullname}<p><br><p>Please visit this url: <br> ${url}${code} <br> to verify your account.</p> 
                   <br><p>If you did not request this, please ignore this email.</p>`;
 
     await sendEmail({ to, from, subject, html });
@@ -203,15 +216,16 @@ const recover = async (req, res, next) => {
     let to = user.email;
     let from = process.env.FROM_EMAIL;
     let code = user.resetPasswordToken;
-    let html = `<p>Hi ${user.username}</p>
+    let html = `<p>Hi ${user.fullname}</p>
                     <p>Please use this code: ${code} to reset your password.</p>
                     <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>`;
 
     await sendEmail({ to, from, subject, html });
 
-    res
-      .status(200)
-      .json({ message: "A reset email has been sent to " + user.email + "." });
+    res.status(200).json({
+      status: 200,
+      message: "A reset email has been sent to " + user.email + ".",
+    });
   } catch (error) {
     next(createError(422, error.message));
   }
@@ -257,12 +271,14 @@ const reset = async (req, res, next) => {
     let subject = "Your password has been changed";
     let to = user.email;
     let from = process.env.FROM_EMAIL;
-    let html = `<p>Hi ${user.username}</p>
+    let html = `<p>Hi ${user.fullname}</p>
                     <p>This is a confirmation that the password for your account ${user.email} has just been changed.</p>`;
 
     await sendEmail({ to, from, subject, html });
 
-    res.status(200).json({ message: "Your password has been updated." });
+    res
+      .status(200)
+      .json({ status: 200, message: "Your password has been updated." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

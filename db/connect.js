@@ -13,7 +13,7 @@ const initDb = (callback) => {
   }
   mongoose
     .connect(
-      `mongodb+srv://${process.env.USER}:${process.env.PASS}@free.mr9c9.mongodb.net/`
+      `mongodb+srv://${process.env.USER}:${process.env.PASS}@free.mr9c9.mongodb.net/groundhog`
     )
     .then((client) => {
       _db = client;

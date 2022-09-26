@@ -9,10 +9,8 @@ const Token = require("./token");
 
 const userSchema = mongoose.Schema(
   {
-    username: {
+    fullname: {
       type: String,
-      max: 10,
-      unique: true,
     },
     email: {
       type: String,
@@ -23,26 +21,12 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    address: {
+    haddress: {
       type: Object,
     },
-    diamond: {
+    phone: {
       type: Number,
       default: 0,
-    },
-    twitterusername: {
-      type: String,
-    },
-    discordusername: {
-      type: String,
-    },
-    multiplier: {
-      type: Number,
-      default: 1,
-    },
-    lastclaimed: {
-      type: Date,
-      default: Date.now,
     },
     isverified: {
       type: Boolean,

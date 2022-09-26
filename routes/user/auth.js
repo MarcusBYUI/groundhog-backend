@@ -16,8 +16,8 @@ const isAuth = require("../../middlewares/isAuth/isauth");
 routes.post("/login", login);
 routes.get("/logout", logout);
 routes.post("/signup", addUser);
-routes.post("/resend", isAuth, resendToken);
-routes.post("/verify", isAuth, verify);
+routes.post("/resend", resendToken);
+routes.post("/verify", verify);
 routes.post("/recover", recover);
 routes.post("/reset", reset);
 
