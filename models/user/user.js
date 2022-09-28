@@ -32,6 +32,11 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    address: {
+      type: String,
+      required: true,
+      default: null,
+    },
     resetPasswordToken: {
       type: String,
       default: "",
@@ -43,6 +48,14 @@ const userSchema = mongoose.Schema(
     level: {
       type: String,
       default: "user",
+    },
+    totalPaid: {
+      type: Number,
+      default: 0,
+    },
+    pendingPaid: {
+      type: Number,
+      default: 0,
     },
     date: {
       type: Date,

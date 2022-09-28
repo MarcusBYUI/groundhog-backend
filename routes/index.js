@@ -5,6 +5,7 @@ const createError = require("http-errors");
 const UsersRoute = require("./user/users");
 const authRoute = require("./user/auth");
 const collectionRoute = require("./collection/collection");
+const stakeRoute = require("./stake/stake");
 
 //auth
 routes.use("/auth", authRoute);
@@ -14,6 +15,9 @@ routes.use("/user", UsersRoute);
 
 //collection route
 routes.use("/collection", collectionRoute);
+
+//stake route
+routes.use("/stake", stakeRoute);
 
 //404 error handler
 routes.use((req, res, next) => {
