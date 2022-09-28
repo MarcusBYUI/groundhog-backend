@@ -44,6 +44,7 @@ const stake = async (req, res, next) => {
 
     //add address to user if not present
     if (req.user.address === 0) {
+      console.log("gothere");
       await User.updateOne(
         {
           _id: req.user._id,
@@ -84,10 +85,41 @@ const getStakesById = async (req, res, next) => {
       return;
     }
 
-    res.status(200).json({ status: 200, data: result });
+    const filteredArr = result.filter((item) => item.live === true);
+
+    res.status(200).json({ status: 200, data: filteredArr });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { stake, payUser, getStakesById };
+const unStake = async (req, res, next) => {
+  const schema = Joi.object().keys({
+    stakeId: Joi.string().required(),
+  });
+
+  const value = await schema.validateAsync(req.body);
+  try {
+    const updateResult = await Stake.updateOne(
+      {
+        user: req.user._id,
+        stakeId: value.stakeId,
+      },
+      { $set: { live: false } }
+    );
+
+    return updateResult.modifiedCount > 0
+      ? //if update went through
+        res.status(200).json({ status: 200, message: "Updated" })
+      : // if
+      updateResult.matchedCount < 1
+      ? //if product does not exist
+        next(createError(422, "User does not exist"))
+      : // product exist but nothing was updated
+        res.status(200).send(`No update was made`);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { stake, payUser, getStakesById, unStake };
