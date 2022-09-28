@@ -12,6 +12,7 @@ const {
   nftABI,
 } = require("../../utils/index");
 
+//stake NFT
 const stake = async (req, res, next) => {
   const schema = Joi.object().keys({
     stakeId: Joi.string().required(),
@@ -42,7 +43,7 @@ const stake = async (req, res, next) => {
     const stakeROI = JSON.parse(tokenResult);
 
     //add address to user if not present
-    if (req.user.address === null) {
+    if (req.user.address === 0) {
       await User.updateOne(
         {
           _id: req.user._id,
@@ -71,4 +72,22 @@ const stake = async (req, res, next) => {
 };
 const payUser = async (req, res, next) => {};
 
-module.exports = { stake, payUser };
+//getStaked NFTs for User
+const getStakesById = async (req, res, next) => {
+  try {
+    const result = await Stake.find({
+      user: req.user._id,
+    });
+
+    if (result.length < 1) {
+      next(createError(422, "No stakes for User"));
+      return;
+    }
+
+    res.status(200).json({ status: 200, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { stake, payUser, getStakesById };

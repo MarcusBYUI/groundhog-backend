@@ -26,7 +26,7 @@ const stakeSchema = mongoose.Schema(
       default: 0,
     },
     lastPayment: {
-      type: Number,
+      type: Date,
       required: true,
       default: Date.now,
     },
