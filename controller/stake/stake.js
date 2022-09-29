@@ -73,7 +73,6 @@ const stake = async (req, res, next) => {
     next(createError(422, error.message));
   }
 };
-const payUser = async (req, res, next) => {};
 
 //getStaked NFTs for User
 const getStakesById = async (req, res, next) => {
@@ -124,4 +123,4 @@ const unStake = async (req, res, next) => {
   }
 };
 
-module.exports = { stake, payUser, getStakesById, unStake };
+module.exports = { stake, getStakesById, unStake };

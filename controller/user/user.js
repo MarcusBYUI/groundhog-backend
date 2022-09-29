@@ -3,6 +3,7 @@
 const mongoose = require("mongoose");
 const User = require("../../models/user/user");
 const createError = require("http-errors");
+const Joi = require("joi");
 
 //get a user
 //update user address
@@ -46,7 +47,7 @@ const getAllUsers = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   const document = {};
-  const keys = ["address"];
+  const keys = ["userid", "amount"];
 
   //get the values from body
   for (const key in req.body) {
@@ -62,24 +63,25 @@ const updateUser = async (req, res, next) => {
   }
 
   const schema = Joi.object().keys({
-    address: Joi.array().required(),
+    userid: Joi.string().required(),
+    amount: Joi.number().required(),
   });
 
   try {
     const value = await schema.validateAsync(document);
 
+    const user = await User.findById(value.userid);
+
     const updateResult = await User.updateOne(
       {
-        _id: req.user._id,
+        _id: value.userid,
       },
-      { $set: value }
+      { $set: { pendingPaid: 0, totalPaid: user.totalPaid + value.amount } }
     );
 
     return updateResult.modifiedCount > 0
       ? //if update went through
-        res
-          .status(200)
-          .send(`User with Id ${req.params.id} was updated succesfully`)
+        res.status(200).json({ status: 200, message: "successful" })
       : // if
       updateResult.matchedCount < 1
       ? //if product does not exist
@@ -95,19 +97,21 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-const claimDiamond = async (req, res, next) => {
-  //get user
+const deleteUser = async (req, res, next) => {
   try {
-    const user = await User.findOne({ _id: req.user._id });
-    const settings = await Settings.findOne({ name: "settings" });
+    const user = await User.deleteOne({ _id: req.params.id });
 
-    console.log(user.lastclaimed);
-
-    // const update = {
-    //   diamond: user.diamond + settings.diamonds * user.multiplier,
-
-    // };
-  } catch (error) {}
+    console.log();
+    if (user.deletedCount > 0)
+      res.status(200).json({ status: 200, message: "user deleted" });
+    else res.status(422).json({ status: 422, message: "No user deleted" });
+  } catch (error) {
+    if (error instanceof mongoose.CastError) {
+      next(createError(422, "Invalid user ID"));
+      return;
+    }
+    next(createError(422, error.message));
+  }
 };
 
-module.exports = { getUserById, updateUser, getAllUsers };
+module.exports = { getUserById, updateUser, getAllUsers, deleteUser };
