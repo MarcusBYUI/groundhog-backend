@@ -26,6 +26,24 @@ const getUserById = async (req, res, next) => {
   }
 };
 
+const getAllUsers = async (req, res, next) => {
+  try {
+    const user = await User.find();
+
+    if (user.length < 1) {
+      next(createError(422, "No Users"));
+      return;
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    if (error instanceof mongoose.CastError) {
+      next(createError(422, "Invalid user ID"));
+      return;
+    }
+    next(createError(422, error.message));
+  }
+};
+
 const updateUser = async (req, res, next) => {
   const document = {};
   const keys = ["address"];
@@ -92,4 +110,4 @@ const claimDiamond = async (req, res, next) => {
   } catch (error) {}
 };
 
-module.exports = { getUserById, updateUser };
+module.exports = { getUserById, updateUser, getAllUsers };

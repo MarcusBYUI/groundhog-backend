@@ -40,11 +40,12 @@ const stake = async (req, res, next) => {
     //get % from the token contract
     const tokenContract = new ethers.Contract(nftContract, nftABI, provider);
     const tokenResult = await tokenContract.stakingROI(tokenId);
+    const FeeResult = await tokenContract.idToFee(tokenId);
     const stakeROI = JSON.parse(tokenResult);
+    const cost = JSON.parse(FeeResult) / 10 ** 18;
 
     //add address to user if not present
-    if (req.user.address === 0) {
-      console.log("gothere");
+    if (req.user.address === "0") {
       await User.updateOne(
         {
           _id: req.user._id,
@@ -58,6 +59,7 @@ const stake = async (req, res, next) => {
       stakeId: value.stakeId,
       address: value.address,
       stakeROI,
+      cost,
     });
 
     await stake.save();
