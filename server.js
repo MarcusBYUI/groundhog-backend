@@ -8,6 +8,8 @@ const passportSetup = require("./config/passport-setup");
 const passport = require("passport");
 const dotenv = require("dotenv");
 
+const initCronJobs = require("./cronevents/index");
+
 dotenv.config();
 
 //init express and middlewares
@@ -19,6 +21,9 @@ const PORT = process.env.PORT || 3001;
 //passport
 app.enable("trust proxy");
 app.use(passport.initialize());
+
+//start Cron Job
+initCronJobs();
 
 //routes
 app.use("/", Routes);

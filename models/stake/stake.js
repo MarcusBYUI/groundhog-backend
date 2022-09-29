@@ -20,6 +20,10 @@ const stakeSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    cost: {
+      type: Number,
+      required: true,
+    },
     live: {
       type: Boolean,
       default: true,

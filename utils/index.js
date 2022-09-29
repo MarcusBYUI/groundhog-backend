@@ -877,7 +877,7 @@ const stakeABI = [
 
 const stakeContract = "0xf6f3971B0818a94531e77c7856f5F035896EF7De";
 
-const nftContract = "0xFF8875b1CC56f17253eB3A2074586b17140db34e";
+const nftContract = "0xF1cfd169cD19535c3591628BB1CDbfA94C246758";
 const nftABI = [
   {
     inputs: [
@@ -1273,6 +1273,25 @@ const nftABI = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "idToFee",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
