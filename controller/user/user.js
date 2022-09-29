@@ -2,6 +2,9 @@
 //coming
 const mongoose = require("mongoose");
 const User = require("../../models/user/user");
+const Payment = require("../../models/payments/payments");
+const { Parser } = require("json2csv");
+
 const createError = require("http-errors");
 const Joi = require("joi");
 
@@ -79,6 +82,16 @@ const updateUser = async (req, res, next) => {
       { $set: { pendingPaid: 0, totalPaid: user.totalPaid + value.amount } }
     );
 
+    const payment = new Payment({
+      name: user.fullname,
+      address: user.address,
+      email: user.email,
+      amount: value.amount,
+      phone: user.phone,
+    });
+
+    await payment.save();
+
     return updateResult.modifiedCount > 0
       ? //if update went through
         res.status(200).json({ status: 200, message: "successful" })
@@ -101,7 +114,6 @@ const deleteUser = async (req, res, next) => {
   try {
     const user = await User.deleteOne({ _id: req.params.id });
 
-    console.log();
     if (user.deletedCount > 0)
       res.status(200).json({ status: 200, message: "user deleted" });
     else res.status(422).json({ status: 422, message: "No user deleted" });
@@ -114,4 +126,44 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { getUserById, updateUser, getAllUsers, deleteUser };
+const getPayments = async (req, res, next) => {
+  const schema = Joi.object().keys({
+    from: Joi.date().required(),
+    to: Joi.date().required(),
+  });
+
+  try {
+    const value = await schema.validateAsync(req.body);
+    const payment = await Payment.find({
+      date: { $gte: new Date(value.from), $lt: new Date(value.to) },
+    });
+
+    const fields = [
+      "_id",
+      "name",
+      "address",
+      "email",
+      "amount",
+      "phone",
+      "date",
+    ];
+    const opts = { fields };
+
+    const parser = new Parser(opts);
+    const csv = parser.parse(payment);
+    res.type("text/csv").attachment("payments.csv").send(csv);
+  } catch (error) {
+    if (error instanceof mongoose.CastError) {
+      next(createError(422, "Invalid user ID"));
+      return;
+    }
+    next(createError(422, error.message));
+  }
+};
+module.exports = {
+  getUserById,
+  updateUser,
+  getAllUsers,
+  deleteUser,
+  getPayments,
+};
