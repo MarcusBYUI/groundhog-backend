@@ -86,9 +86,8 @@ userSchema.pre("save", function (next) {
 });
 
 userSchema.methods.generateJWT = function () {
-  const today = new Date();
-  const expirationDate = new Date(today);
-  expirationDate.setDate(today.getDate() + 60);
+  const today = new Date().getTime();
+  const expirationDate = today + 60000 * 60; // 1hr
 
   let payload = {
     id: this._id,
@@ -99,7 +98,7 @@ userSchema.methods.generateJWT = function () {
   };
 
   return jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: parseInt(expirationDate.getTime() / 1000, 10),
+    expiresIn: parseInt(expirationDate / 1000, 10),
   });
 };
 
