@@ -7,7 +7,7 @@ const createError = require("http-errors");
 const { sendEmail } = require("../../utils/index");
 const Token = require("../../models/user/token");
 
-const url = "https://main.d2bglchllsa1ed.amplifyapp.com/verify/";
+const url = "https://main.d2bglchllsa1ed.amplifyapp.com/verify/"
 
 const login = async (req, res, next) => {
   const schema = Joi.object().keys({
