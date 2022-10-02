@@ -875,9 +875,9 @@ const stakeABI = [
   },
 ];
 
-const stakeContract = "0xf6f3971B0818a94531e77c7856f5F035896EF7De";
+const stakeContract = "0x2CD182E46D667Ff33C40331f3C5bc1D704D875ED";
 
-const nftContract = "0xF1cfd169cD19535c3591628BB1CDbfA94C246758";
+const nftContract = "0xBd83047ce6fd955CADA04bCB6e32ee1318Ea5669";
 const nftABI = [
   {
     inputs: [
