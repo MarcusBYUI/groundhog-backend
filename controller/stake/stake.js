@@ -35,10 +35,38 @@ const stake = async (req, res, next) => {
       return;
     }
 
+    //initialize token contract and get token id
+    const tokenContract = new ethers.Contract(nftContract, nftABI, provider);
     const tokenId = BigNumber.from(`${result[3]}`).toString();
 
+    //get the duration of the nft currently staked
+    const nftResponse = await tokenContract.tokenIdToNFTId(tokenId);
+    //get stake duration
+    const stakeDuration = await contract.nftIdToDUration(nftResponse);
+    //calculate duration from now
+    const today = new Date();
+    const date = new Date();
+
+    const stakedurStamp = new Date(
+      date.setMonth(
+        today.getMonth() +
+          (BigNumber.from(`${stakeDuration._hex}`).toString() - 1)
+      )
+    );
+
+    const stakeDurFromContract = await contract.stakeDuration(value.stakeId);
+
+    //compare duration with staked
+
+    if (
+      stakedurStamp.getTime() >
+      BigNumber.from(`${stakeDurFromContract._hex}`).toNumber() + 600000
+    ) {
+      next(createError.UnprocessableEntity("Inconsistent staking parameters"));
+      return;
+    }
+
     //get % from the token contract
-    const tokenContract = new ethers.Contract(nftContract, nftABI, provider);
     const tokenResult = await tokenContract.stakingROI(tokenId);
     const FeeResult = await tokenContract.idToFee(tokenId);
     const stakeROI = JSON.parse(tokenResult);
@@ -60,6 +88,7 @@ const stake = async (req, res, next) => {
       address: value.address,
       stakeROI,
       cost,
+      stakeEnd: stakedurStamp.getTime(),
     });
 
     await stake.save();

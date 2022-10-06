@@ -8,6 +8,7 @@ const addNFT = async (req, res, next) => {
     image: Joi.string().required(),
     cost: Joi.number().required(),
     percentage: Joi.number().required(),
+    duration: Joi.number().required(),
   });
 
   try {
@@ -17,7 +18,8 @@ const addNFT = async (req, res, next) => {
       nftName: value.nftName,
       image: value.image,
       cost: value.cost,
-      percentage: value.percentage,
+      percentage: value.percentage / 12,
+      duration: value.duration,
     });
 
     const result = await collection.save();
