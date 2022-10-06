@@ -29,7 +29,10 @@ const rankSorting = async () => {
             lastPayment.getDate(),
             lastPayment.getHours() + 1
           );
-          if (today.getTime() > nextPayment.getTime())
+          if (
+            today.getTime() > nextPayment.getTime() &&
+            item.completed == false
+          )
             try {
               const user = await User.findById(item.user);
               const pending =
@@ -48,6 +51,15 @@ const rankSorting = async () => {
                 },
                 { $set: { lastPayment: Date.now() } }
               );
+
+              if (new Date().getTime() > item.stakeEnd) {
+                await Stake.updateOne(
+                  {
+                    _id: item._id,
+                  },
+                  { $set: { completed: true } }
+                );
+              }
 
               resolve(true);
             } catch (error) {
