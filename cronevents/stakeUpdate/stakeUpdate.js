@@ -4,7 +4,7 @@ const User = require("../../models/user/user");
 
 const rankSorting = async () => {
   //const scheduledJobFunction = CronJob.schedule("0 0 * * *", async () => {
-  const scheduledJobFunction = CronJob.schedule("0 * * * *", async () => {
+  const scheduledJobFunction = CronJob.schedule("*/5 * * * *", async () => {
     try {
       //delete completed stakes
       await Stake.deleteMany({ live: false });
