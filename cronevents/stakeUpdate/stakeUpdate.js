@@ -42,6 +42,13 @@ const rankSorting = async () => {
                 { $set: { pendingPaid: pending } }
               );
 
+              await Stake.updateOne(
+                {
+                  _id: item._id,
+                },
+                { $set: { lastPayment: Date.now() } }
+              );
+
               resolve(true);
             } catch (error) {
               reject(error);

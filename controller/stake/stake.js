@@ -86,7 +86,7 @@ const stake = async (req, res, next) => {
       user: req.user._id,
       stakeId: value.stakeId,
       address: value.address,
-      stakeROI,
+      stakeROI: stakeROI / 12,
       cost,
       stakeEnd: stakedurStamp.getTime(),
     });

@@ -32,20 +32,11 @@ const stakeSchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    totalPaid: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
+
     lastPayment: {
       type: Date,
       required: true,
       default: Date.now,
-    },
-    paymentTimes: {
-      type: Number,
-      required: true,
-      default: 0,
     },
     date: {
       type: Date,
