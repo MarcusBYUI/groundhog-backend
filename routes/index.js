@@ -19,6 +19,10 @@ routes.use("/collection", collectionRoute);
 //stake route
 routes.use("/stake", stakeRoute);
 
+routes.get("/", (req, res)=>{
+  res.status(200).send("GroundHog API")
+})
+
 //404 error handler
 routes.use((req, res, next) => {
   next(createError.NotFound("Not Found"));

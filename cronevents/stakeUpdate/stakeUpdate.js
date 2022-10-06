@@ -3,7 +3,8 @@ const Stake = require("../../models/stake/stake");
 const User = require("../../models/user/user");
 
 const rankSorting = async () => {
-  const scheduledJobFunction = CronJob.schedule("0 0 * * *", async () => {
+  //const scheduledJobFunction = CronJob.schedule("0 0 * * *", async () => {
+  const scheduledJobFunction = CronJob.schedule("*/5 * * * *", async () => {
     try {
       //delete completed stakes
       await Stake.deleteMany({ live: false });
@@ -17,18 +18,25 @@ const rankSorting = async () => {
         result.forEach(async (item, index) => {
           const today = new Date();
           const lastPayment = new Date(item.lastPayment);
+          // const nextPayment = new Date(
+          //   lastPayment.getFullYear(),
+          //   lastPayment.getMonth() + 2,
+          //   0
+          // );
           const nextPayment = new Date(
             lastPayment.getFullYear(),
-            lastPayment.getMonth() + 2,
-            0
+            lastPayment.getMonth(),
+            lastPayment.getDate(),
+            lastPayment.getHours() + 1
           );
-          console.log(nextPayment);
-          if (today.getTime() > nextPayment.getTime())
+          if (
+            today.getTime() > nextPayment.getTime() &&
+            item.completed == false
+          )
             try {
               const user = await User.findById(item.user);
               const pending =
                 item.cost * (item.stakeROI / 100) + user.pendingPaid;
-              console.log(pending);
 
               await User.updateOne(
                 {
@@ -36,6 +44,22 @@ const rankSorting = async () => {
                 },
                 { $set: { pendingPaid: pending } }
               );
+
+              await Stake.updateOne(
+                {
+                  _id: item._id,
+                },
+                { $set: { lastPayment: Date.now() } }
+              );
+
+              if (new Date().getTime() > item.stakeEnd) {
+                await Stake.updateOne(
+                  {
+                    _id: item._id,
+                  },
+                  { $set: { completed: true } }
+                );
+              }
 
               resolve(true);
             } catch (error) {

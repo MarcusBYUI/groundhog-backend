@@ -160,10 +160,68 @@ const getPayments = async (req, res, next) => {
     next(createError(422, error.message));
   }
 };
+
+const getPendingCSV = async (req, res, next) => {
+  try {
+    const payment = await User.find({
+      pendingPaid: { $gte: 0 },
+    });
+
+    if (payment.length < 1) {
+      next(createError(422, "No Pending Payments"));
+      return;
+    }
+
+    const csvPayment = await new Promise((resolve, reject) => {
+      const arr = [];
+      payment.forEach((item, index) => {
+        const csvPayment = {
+          _id: item._id,
+          name: item.fullname,
+          address: item.address,
+          email: item.email,
+          amount: item.pendingPaid,
+          phone: item.phone,
+          date: item.date,
+        };
+
+        arr.push(csvPayment);
+
+        if (arr.length - 1 == index) {
+          resolve(arr);
+        }
+      });
+    });
+
+    const fields = [
+      "_id",
+      "name",
+      "address",
+      "email",
+      "amount",
+      "phone",
+      "date",
+    ];
+    const opts = { fields };
+
+    console.log();
+
+    const parser = new Parser(opts);
+    const csv = parser.parse(csvPayment);
+    res.type("text/csv").attachment("pending.csv").send(csv);
+  } catch (error) {
+    if (error instanceof mongoose.CastError) {
+      next(createError(422, "Invalid user ID"));
+      return;
+    }
+    next(createError(422, error.message));
+  }
+};
 module.exports = {
   getUserById,
   updateUser,
   getAllUsers,
   deleteUser,
   getPayments,
+  getPendingCSV,
 };
