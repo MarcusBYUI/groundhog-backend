@@ -15,6 +15,7 @@ const stakeSchema = mongoose.Schema(
     completed: {
       type: Boolean,
       required: true,
+      default: false,
     },
     address: {
       type: String,
