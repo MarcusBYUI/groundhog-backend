@@ -17,6 +17,7 @@ const stake = async (req, res, next) => {
   const schema = Joi.object().keys({
     stakeId: Joi.string().required(),
     address: Joi.string().required(),
+    nftName: Joi.string().required(),
   });
 
   try {
@@ -87,6 +88,7 @@ const stake = async (req, res, next) => {
       address: value.address,
       stakeROI: stakeROI / 12,
       cost,
+      nftName: value.nftName,
       stakeEnd: stakedurStamp.getTime(),
     });
 

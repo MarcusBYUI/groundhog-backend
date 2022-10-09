@@ -12,6 +12,10 @@ const stakeSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    nftName: {
+      type: String,
+      required: true,
+    },
     completed: {
       type: Boolean,
       required: true,
