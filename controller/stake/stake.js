@@ -50,7 +50,7 @@ const stake = async (req, res, next) => {
     const stakedurStamp = new Date(
       date.setMonth(
         today.getMonth() +
-          (BigNumber.from(`${stakeDuration._hex}`).toString() - 1)
+          (BigNumber.from(`${stakeDuration._hex}`).toNumber() + 1)
       )
     );
 
