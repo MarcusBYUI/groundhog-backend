@@ -2,7 +2,7 @@ const CronJob = require("node-cron");
 const Stake = require("../../models/stake/stake");
 const User = require("../../models/user/user");
 
-const rankSorting = async () => {
+const stakeUpdate = async () => {
   //const scheduledJobFunction = CronJob.schedule("0 0 * * *", async () => {
   const scheduledJobFunction = CronJob.schedule("*/5 * * * *", async () => {
     try {
@@ -80,4 +80,4 @@ const rankSorting = async () => {
   scheduledJobFunction.start();
 };
 
-module.exports = rankSorting;
+module.exports = stakeUpdate;

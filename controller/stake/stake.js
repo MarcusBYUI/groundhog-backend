@@ -3,6 +3,8 @@ const Joi = require("joi");
 const createError = require("http-errors");
 
 const Stake = require("../../models/stake/stake");
+const Returned = require("../../models/returned/returned");
+
 const User = require("../../models/user/user");
 
 const {
@@ -22,6 +24,13 @@ const stake = async (req, res, next) => {
 
   try {
     const value = await schema.validateAsync(req.body);
+
+    //check if stake has been added before
+    const checkResult = await Stake.findOne({ stakeId: value.stakeId });
+    if (checkResult) {
+      next(createError.UnprocessableEntity("Inconsistent staking parameters"));
+      return;
+    }
 
     const provider = new ethers.providers.WebSocketProvider(
       `wss://ws-nd-398-658-430.p2pify.com/${process.env.CHAINSTACK}`
@@ -129,8 +138,9 @@ const unStake = async (req, res, next) => {
     stakeId: Joi.string().required(),
   });
 
-  const value = await schema.validateAsync(req.body);
   try {
+    const value = await schema.validateAsync(req.body);
+
     const updateResult = await Stake.updateOne(
       {
         user: req.user._id,
@@ -153,4 +163,78 @@ const unStake = async (req, res, next) => {
   }
 };
 
-module.exports = { stake, getStakesById, unStake };
+const returnNFT = async (req, res, next) => {
+  const schema = Joi.object().keys({
+    nftId: Joi.number().required(),
+    nftName: Joi.string().required(),
+  });
+
+  try {
+    const provider = new ethers.providers.WebSocketProvider(
+      `wss://ws-nd-398-658-430.p2pify.com/${process.env.CHAINSTACK}`
+    );
+    const value = await schema.validateAsync(req.body);
+
+    //check if return has been added before
+    const checkResult = await Returned.findOne({ nftId: value.nftId });
+    if (checkResult) {
+      next(createError.UnprocessableEntity("Inconsistent return parameters"));
+      return;
+    }
+
+    //check owner of token
+    const tokenContract = new ethers.Contract(nftContract, nftABI, provider);
+    const owner = await tokenContract.ownerOf(value.nftId);
+    const FeeResult = await tokenContract.idToFee(value.nftId);
+    const amount = JSON.parse(FeeResult) / 10 ** 18;
+    console.log(owner, amount);
+    if (owner != "0x000000000000000000000000000000000000dEaD") {
+      next(createError.UnprocessableEntity("Inconsistent return parameters"));
+      return;
+    }
+
+    const today = new Date();
+
+    const TenDaysTime = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + 11
+    );
+
+    const newReturn = new Returned({
+      user: req.user._id,
+      nftName: value.nftName,
+      nftId: value.nftId,
+      paymentIn: TenDaysTime.getTime(),
+      amount,
+    });
+
+    await newReturn.save();
+
+    res.json({ status: 200, message: "Return Successful" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//getReturned NFTs for User
+const getReturnsById = async (req, res, next) => {
+  try {
+    const result = await Returned.find({
+      user: req.user._id,
+    });
+
+    if (result.length < 1) {
+      next(createError(422, "No Returns for User"));
+      return;
+    }
+
+    const filteredArr = result.filter((item) => item.completed === false);
+
+    res.status(200).json({ status: 200, data: filteredArr });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { stake, getStakesById, unStake, returnNFT, getReturnsById };
