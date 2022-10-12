@@ -217,6 +217,64 @@ const getPendingCSV = async (req, res, next) => {
     next(createError(422, error.message));
   }
 };
+
+const getAllUsersCSV = async (req, res, next) => {
+  try {
+    const user = await User.find();
+
+    if (user.length < 1) {
+      next(createError(422, "No Users"));
+      return;
+    }
+    const csvUser = await new Promise((resolve, reject) => {
+      const arr = [];
+      user.forEach((item, index) => {
+        const csvUser = {
+          _id: item._id,
+          name: item.fullname,
+          address: item.address,
+          email: item.email,
+          pending: item.pendingPaid,
+          paid: item.totalPaid,
+          phone: item.phone,
+          house: item.haddress,
+          date: item.date,
+        };
+
+        arr.push(csvUser);
+
+        if (arr.length - 1 == index) {
+          resolve(arr);
+        }
+      });
+    });
+
+    const fields = [
+      "_id",
+      "name",
+      "address",
+      "email",
+      "amount",
+      "pending",
+      "paid",
+      "phone",
+      "house",
+      "date",
+    ];
+    const opts = { fields };
+
+    const parser = new Parser(opts);
+    const csv = parser.parse(csvUser);
+    res.type("text/csv").attachment("users.csv").send(csv);
+  } catch (error) {
+    if (error instanceof mongoose.CastError) {
+      next(createError(422, "Invalid user ID"));
+      return;
+    }
+    next(createError(422, error.message));
+  }
+};
+
 module.exports = {
   getUserById,
   updateUser,
@@ -224,4 +282,5 @@ module.exports = {
   deleteUser,
   getPayments,
   getPendingCSV,
+  getAllUsersCSV,
 };
