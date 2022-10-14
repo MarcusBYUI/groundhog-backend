@@ -237,4 +237,28 @@ const getReturnsById = async (req, res, next) => {
   }
 };
 
-module.exports = { stake, getStakesById, unStake, returnNFT, getReturnsById };
+const getAllReturns = async (req, res, next) => {
+  try {
+    const result = await Returned.find();
+
+    if (result.length < 1) {
+      next(createError(422, "No Returns"));
+      return;
+    }
+
+    const filteredArr = result.filter((item) => item.completed === false);
+
+    res.status(200).json({ status: 200, data: filteredArr });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  stake,
+  getStakesById,
+  unStake,
+  returnNFT,
+  getReturnsById,
+  getAllReturns,
+};
