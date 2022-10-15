@@ -91,12 +91,6 @@ const stake = async (req, res, next) => {
       );
     }
 
-    const oneDayTime = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate() + 1
-    );
-
     const stake = new Stake({
       user: req.user._id,
       stakeId: value.stakeId,
@@ -104,8 +98,7 @@ const stake = async (req, res, next) => {
       stakeROI: stakeROI / 12,
       cost,
       nftName: value.nftName,
-      //stakeEnd: stakedurStamp.getTime(),
-      stakeEnd: oneDayTime.getTime(),
+      stakeEnd: stakedurStamp.getTime(),
     });
 
     await stake.save();
@@ -205,8 +198,7 @@ const returnNFT = async (req, res, next) => {
     const TenDaysTime = new Date(
       today.getFullYear(),
       today.getMonth(),
-      //today.getDate() + 11
-      today.getDate() + 1
+      today.getDate() + 11
     );
 
     const newReturn = new Returned({

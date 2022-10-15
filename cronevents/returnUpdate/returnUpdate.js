@@ -3,7 +3,6 @@ const Returned = require("../../models/returned/returned");
 const User = require("../../models/user/user");
 
 const returnUpdate = async () => {
-  //const scheduledJobFunction = CronJob.schedule("0 0 * * *", async () => {
   const scheduledJobFunction = CronJob.schedule("*/5 * * * *", async () => {
     try {
       //update return
@@ -44,8 +43,8 @@ const returnUpdate = async () => {
       });
 
       if (update) {
-        console.log("Stake Cron completed");
-      } else console.log("Stake Cron Error");
+        console.log("Return Cron completed");
+      } else console.log("Return Cron has no result");
     } catch (error) {
       console.error(error);
     }
