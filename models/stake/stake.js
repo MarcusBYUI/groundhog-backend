@@ -16,6 +16,10 @@ const stakeSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    tokenId: {
+      type: Number,
+      required: true,
+    },
     completed: {
       type: Boolean,
       required: true,

@@ -103,6 +103,7 @@ const stake = async (req, res, next) => {
       address: value.address,
       stakeROI: stakeROI / 12,
       cost,
+      tokenId,
       nftName: value.nftName,
       //stakeEnd: stakedurStamp.getTime(),
       stakeEnd: oneDayTime.getTime(),
