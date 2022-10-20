@@ -15,24 +15,6 @@ function sendEmail(mailOptions) {
 
 const stakeABI = [
   {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_id",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "_duration",
-        type: "uint256",
-      },
-    ],
-    name: "addNFT",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     stateMutability: "nonpayable",
     type: "constructor",
@@ -120,32 +102,6 @@ const stakeABI = [
     type: "event",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "nftContract",
-        type: "address",
-      },
-    ],
-    name: "denyNFT",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-    ],
-    name: "denyRewardToken",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -163,40 +119,6 @@ const stakeABI = [
     ],
     name: "MinimumStakingTimeChanged",
     type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-    ],
-    name: "onERC721Received",
-    outputs: [
-      {
-        internalType: "bytes4",
-        name: "",
-        type: "bytes4",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
   },
   {
     anonymous: false,
@@ -256,32 +178,6 @@ const stakeABI = [
     type: "event",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "nftContract",
-        type: "address",
-      },
-    ],
-    name: "permitNFT",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-    ],
-    name: "permitRewardToken",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -306,26 +202,6 @@ const stakeABI = [
     ],
     name: "PermittedRewardToken",
     type: "event",
-  },
-  {
-    inputs: [],
-    name: "pullOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "pushOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
   },
   {
     anonymous: false,
@@ -365,13 +241,6 @@ const stakeABI = [
     type: "event",
   },
   {
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -389,61 +258,6 @@ const stakeABI = [
     ],
     name: "RewardWalletChanged",
     type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "minimumStakingTime",
-        type: "uint256",
-      },
-    ],
-    name: "setMinimumStakingTimeForRewards",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "wallet",
-        type: "address",
-      },
-    ],
-    name: "setRewardWallet",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "contract IERC721",
-        name: "nftContract",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_duration",
-        type: "uint256",
-      },
-    ],
-    name: "stake",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
   },
   {
     anonymous: false,
@@ -477,32 +291,6 @@ const stakeABI = [
     type: "event",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "stakeId",
-        type: "bytes32",
-      },
-    ],
-    name: "unstake",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -526,6 +314,63 @@ const stakeABI = [
     ],
     name: "UnStake",
     type: "event",
+  },
+  {
+    inputs: [],
+    name: "MINIMUM_STAKING_TIME_FOR_REWARDS",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_id",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "_duration",
+        type: "uint256",
+      },
+    ],
+    name: "addNFT",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "nftContract",
+        type: "address",
+      },
+    ],
+    name: "denyNFT",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+    ],
+    name: "denyRewardToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
@@ -566,19 +411,6 @@ const stakeABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "MINIMUM_STAKING_TIME_FOR_REWARDS",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       {
         internalType: "string",
@@ -598,6 +430,40 @@ const stakeABI = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "data",
+        type: "bytes",
+      },
+    ],
+    name: "onERC721Received",
+    outputs: [
+      {
+        internalType: "bytes4",
+        name: "",
+        type: "bytes4",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "owner",
     outputs: [
@@ -611,6 +477,32 @@ const stakeABI = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "nftContract",
+        type: "address",
+      },
+    ],
+    name: "permitNFT",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+    ],
+    name: "permitRewardToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "permittedNfts",
     outputs: [
@@ -621,6 +513,33 @@ const stakeABI = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "pullOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "pushOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -642,25 +561,6 @@ const stakeABI = [
         internalType: "uint256[]",
         name: "_rewardsPaid",
         type: "uint256[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "rewardsPaid",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -706,6 +606,25 @@ const stakeABI = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "rewardsPaid",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -763,6 +682,99 @@ const stakeABI = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "minimumStakingTime",
+        type: "uint256",
+      },
+    ],
+    name: "setMinimumStakingTimeForRewards",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "wallet",
+        type: "address",
+      },
+    ],
+    name: "setRewardWallet",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract IERC721",
+        name: "nftContract",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_duration",
+        type: "uint256",
+      },
+    ],
+    name: "stake",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    name: "stakeDuration",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "stakeIds",
+    outputs: [
+      {
+        internalType: "bytes32[]",
+        name: "",
+        type: "bytes32[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "account",
         type: "address",
@@ -798,7 +810,7 @@ const stakeABI = [
             type: "uint256",
           },
         ],
-        internalType: "struct GroundHogStaking.StakedNFT[]",
+        internalType: "struct GopherMinesStaking.StakedNFT[]",
         name: "",
         type: "tuple[]",
       },
@@ -849,25 +861,6 @@ const stakeABI = [
     inputs: [
       {
         internalType: "bytes32",
-        name: "stakeId",
-        type: "bytes32",
-      },
-    ],
-    name: "stakedtokenId",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
         name: "",
         type: "bytes32",
       },
@@ -887,35 +880,16 @@ const stakeABI = [
     inputs: [
       {
         internalType: "bytes32",
-        name: "",
+        name: "stakeId",
         type: "bytes32",
       },
     ],
-    name: "stakeDuration",
+    name: "stakedtokenId",
     outputs: [
       {
         internalType: "uint256",
         name: "",
         type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "stakeIds",
-    outputs: [
-      {
-        internalType: "bytes32[]",
-        name: "",
-        type: "bytes32[]",
       },
     ],
     stateMutability: "view",
@@ -940,11 +914,37 @@ const stakeABI = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "stakeId",
+        type: "bytes32",
+      },
+    ],
+    name: "unstake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
 ];
 
-const stakeContract = "0x8B452E8ba5Fe05F0dfabEd8Ce795aC3E601CC804";
+const stakeContract = "0x80425d9297A7dF853C3754C6cCC48128726E2c26";
 
-const nftContract = "0xB972D8f16C6e3152f12D424880B9737de0151193";
+const nftContract = "0xE4090b1dfDE844a0F6020658e761AfFD1f59A797";
 const nftABI = [
   {
     inputs: [
@@ -1546,19 +1546,6 @@ const nftABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address[]",
-        name: "addressList",
-        type: "address[]",
-      },
-    ],
-    name: "removeWhiteList",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "renounceOwnership",
     outputs: [],
@@ -1711,19 +1698,6 @@ const nftABI = [
       },
     ],
     name: "setApprovalForAll",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "newBaseURI",
-        type: "string",
-      },
-    ],
-    name: "setBaseURI",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -2027,19 +2001,6 @@ const nftABI = [
       },
     ],
     name: "updateRouter",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address[]",
-        name: "addressList",
-        type: "address[]",
-      },
-    ],
-    name: "whiteList",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

@@ -33,7 +33,7 @@ const stake = async (req, res, next) => {
     }
 
     const provider = new ethers.providers.WebSocketProvider(
-      `wss://ws-nd-398-658-430.p2pify.com/${process.env.CHAINSTACK}`
+      `wss://ws-nd-878-984-232.p2pify.com/${process.env.CHAINSTACK}`
     );
 
     const contract = new ethers.Contract(stakeContract, stakeABI, provider);
@@ -91,12 +91,6 @@ const stake = async (req, res, next) => {
       );
     }
 
-    const oneDayTime = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate() + 1
-    );
-
     const stake = new Stake({
       user: req.user._id,
       stakeId: value.stakeId,
@@ -105,8 +99,7 @@ const stake = async (req, res, next) => {
       cost,
       tokenId,
       nftName: value.nftName,
-      //stakeEnd: stakedurStamp.getTime(),
-      stakeEnd: oneDayTime.getTime(),
+      stakeEnd: stakedurStamp.getTime(),
     });
 
     await stake.save();
@@ -179,7 +172,7 @@ const returnNFT = async (req, res, next) => {
 
   try {
     const provider = new ethers.providers.WebSocketProvider(
-      `wss://ws-nd-398-658-430.p2pify.com/${process.env.CHAINSTACK}`
+      `wss://ws-nd-878-984-232.p2pify.com/${process.env.CHAINSTACK}`
     );
     const value = await schema.validateAsync(req.body);
 
@@ -206,8 +199,7 @@ const returnNFT = async (req, res, next) => {
     const TenDaysTime = new Date(
       today.getFullYear(),
       today.getMonth(),
-      //today.getDate() + 11
-      today.getDate() + 1
+      today.getDate() + 11
     );
 
     const newReturn = new Returned({

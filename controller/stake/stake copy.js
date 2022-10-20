@@ -33,7 +33,7 @@ const stake = async (req, res, next) => {
     }
 
     const provider = new ethers.providers.WebSocketProvider(
-      `wss://ws-nd-398-658-430.p2pify.com/${process.env.CHAINSTACK}`
+      `wss://ws-nd-878-984-232.p2pify.com/${process.env.CHAINSTACK}`
     );
 
     const contract = new ethers.Contract(stakeContract, stakeABI, provider);
@@ -172,7 +172,7 @@ const returnNFT = async (req, res, next) => {
 
   try {
     const provider = new ethers.providers.WebSocketProvider(
-      `wss://ws-nd-398-658-430.p2pify.com/${process.env.CHAINSTACK}`
+      `wss://ws-nd-878-984-232.p2pify.com/${process.env.CHAINSTACK}`
     );
     const value = await schema.validateAsync(req.body);
 
