@@ -15,7 +15,12 @@ dotenv.config();
 //init express and middlewares
 const app = express();
 app.use(bodyParser.json());
-app.use(cors({ credentials: true }));
+app.use(
+  cors({
+    credentials: true,
+    origin: "https://www.gophermines.com",
+  })
+);
 const PORT = process.env.PORT || 3001;
 
 //passport

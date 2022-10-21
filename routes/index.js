@@ -19,9 +19,9 @@ routes.use("/collection", collectionRoute);
 //stake route
 routes.use("/stake", stakeRoute);
 
-routes.get("/", (req, res)=>{
-  res.status(200).send("GroundHog API")
-})
+routes.get("/", (req, res) => {
+  res.status(200).send("GopherMines API");
+});
 
 //404 error handler
 routes.use((req, res, next) => {

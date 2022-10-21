@@ -7,6 +7,7 @@ const {
   deleteUser,
   getPayments,
   getPendingCSV,
+  getAllUsersCSV,
 } = require("../../controller/user/user");
 const routes = require("express").Router();
 
@@ -19,5 +20,6 @@ routes.put("/", isAuth, isAdmin, updateUser);
 routes.delete("/:id", isAuth, isAdmin, deleteUser);
 routes.post("/payments", isAuth, isAdmin, getPayments);
 routes.get("/pending", isAuth, isAdmin, getPendingCSV);
+routes.get("/allusers", isAuth, isAdmin, getAllUsersCSV);
 
 module.exports = routes;

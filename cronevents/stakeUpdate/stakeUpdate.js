@@ -2,9 +2,8 @@ const CronJob = require("node-cron");
 const Stake = require("../../models/stake/stake");
 const User = require("../../models/user/user");
 
-const rankSorting = async () => {
-  //const scheduledJobFunction = CronJob.schedule("0 0 * * *", async () => {
-  const scheduledJobFunction = CronJob.schedule("*/5 * * * *", async () => {
+const stakeUpdate = async () => {
+  const scheduledJobFunction = CronJob.schedule("0 0 * * *", async () => {
     try {
       //delete completed stakes
       await Stake.deleteMany({ live: false });
@@ -18,16 +17,10 @@ const rankSorting = async () => {
         result.forEach(async (item, index) => {
           const today = new Date();
           const lastPayment = new Date(item.lastPayment);
-          // const nextPayment = new Date(
-          //   lastPayment.getFullYear(),
-          //   lastPayment.getMonth() + 2,
-          //   0
-          // );
           const nextPayment = new Date(
             lastPayment.getFullYear(),
-            lastPayment.getMonth(),
-            lastPayment.getDate(),
-            lastPayment.getHours() + 1
+            lastPayment.getMonth() + 2,
+            0
           );
           if (
             today.getTime() > nextPayment.getTime() &&
@@ -71,7 +64,7 @@ const rankSorting = async () => {
 
       if (update) {
         console.log("Stake Cron completed");
-      } else console.log("Stake Cron Error");
+      } else console.log("Stake Cron has no result");
     } catch (error) {
       console.error(error);
     }
@@ -80,4 +73,4 @@ const rankSorting = async () => {
   scheduledJobFunction.start();
 };
 
-module.exports = rankSorting;
+module.exports = stakeUpdate;
